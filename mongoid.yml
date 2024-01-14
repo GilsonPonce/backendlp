@@ -1,0 +1,6 @@
+development:
+  clients:
+    default:
+      database: lpstore
+      hosts:
+        - localhost:27017
