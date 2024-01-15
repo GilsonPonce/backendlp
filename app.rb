@@ -1,8 +1,11 @@
 require 'sinatra'
 require 'mongoid'
 require_relative 'models/persona'
+
 require_relative 'controllers/persona_controller'
 require_relative 'controllers/pedido_controller'
+require_relative 'controllers/comentario_controller'
+require_relative 'controllers/producto_controller'
 
 Mongoid.load!('mongoid.yml', :development)
 
@@ -72,4 +75,61 @@ end
 # Ruta para eliminar un pedido por ID
 delete '/pedidos/:id' do
   PedidosController.destroy(params[:id])
+end
+
+
+
+
+
+# Ruta para obtener todos los productos
+get '/productos' do
+  ProductosController.index
+end
+
+# Ruta para obtener un producto por ID
+get '/productos/:id' do
+  ProductosController.show(params[:id])
+end
+
+# Ruta para crear un nuevo producto
+post '/productos' do
+  ProductosController.create(request.body.read)
+end
+
+# Ruta para actualizar un producto por ID
+put '/productos/:id' do
+  ProductosController.update(params[:id], request.body.read)
+end
+
+# Ruta para eliminar un producto por ID
+delete '/productos/:id' do
+  ProductosController.destroy(params[:id])
+end
+
+
+
+
+# Ruta para obtener todos los comentarios
+get '/comentarios' do
+  ComentariosController.index
+end
+
+# Ruta para obtener un comentario por ID
+get '/comentarios/:id' do
+  ComentariosController.show(params[:id])
+end
+
+# Ruta para crear un nuevo comentario
+post '/comentarios' do
+  ComentariosController.create(request.body.read)
+end
+
+# Ruta para actualizar un comentario por ID
+put '/comentarios/:id' do
+  ComentariosController.update(params[:id], request.body.read)
+end
+
+# Ruta para eliminar un comentario por ID
+delete '/comentarios/:id' do
+  ComentariosController.destroy(params[:id])
 end
