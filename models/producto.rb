@@ -5,10 +5,10 @@ class Producto
 
   field :marca, type: String
   field :modelo, type: String
-  field :valor, type: Double
+  field :valor, type: Float
   field :descuento, type: Float
   field :pais, type: String
-  field :cantidad, type: Int
+  field :cantidad, type: Integer
   field :proveedor, type: Persona
 
   #marca, modelo, valor, descuento, pais, cantidad, proveedor

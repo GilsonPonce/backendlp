@@ -4,8 +4,8 @@ require_relative 'models/persona'
 
 require_relative 'controllers/persona_controller'
 require_relative 'controllers/pedido_controller'
-require_relative 'controllers/comentario_controller'
 require_relative 'controllers/producto_controller'
+require_relative 'controllers/comentario_controller'
 
 Mongoid.load!('mongoid.yml', :development)
 
