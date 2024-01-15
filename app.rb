@@ -57,7 +57,7 @@ get '/pedidos/:id' do
   PedidosController.show(params[:id])
 end
 
-# Ruta para obtener pedidos por cliente
+# Ruta para obtener pedidos por persona
 get '/pedidos/persona/:persona_id' do
   PedidosController.por_persona(params[:persona_id])
 end

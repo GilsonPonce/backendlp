@@ -1,5 +1,5 @@
 require 'mongoid'
-
+#class
 class Pedido
     include Mongoid::Document
 
