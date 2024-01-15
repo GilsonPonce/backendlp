@@ -1,4 +1,4 @@
-requiere 'mongoid'
+require 'mongoid'
 
 class Pedido
     include Mongoid::Document

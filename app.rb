@@ -55,8 +55,8 @@ get '/pedidos/:id' do
 end
 
 # Ruta para obtener pedidos por cliente
-get '/pedidos/cliente/:cliente_id' do
-  PedidosController.por_cliente(params[:cliente_id])
+get '/pedidos/persona/:persona_id' do
+  PedidosController.por_persona(params[:persona_id])
 end
 
 # Ruta para crear un nuevo pedido

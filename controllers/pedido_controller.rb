@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'sinatra/base'
 require_relative '../models/pedido'
-require_relative '../models/cliente'
+require_relative '../models/persona'
 
 class PedidosController < Sinatra::Base
 
@@ -11,15 +11,15 @@ class PedidosController < Sinatra::Base
     pedidos.to_json
   end
 
-  def self.por_cliente(cliente_id)
-    cliente = Cliente.find(cliente_id)
+  def self.por_persona(persona_id)
+    persona = Persona.find(persona_id)
     
-    if cliente
-      pedidos = Pedido.where(cliente: cliente)
+    if persona
+      pedidos = Pedido.where(persona: persona)
       pedidos.to_json
     else
       404
-      { mensaje: 'Cliente no encontrado' }.to_json
+      { mensaje: 'Persona no encontrado' }.to_json
     end
   end
 
