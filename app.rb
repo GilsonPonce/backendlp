@@ -1,9 +1,6 @@
 require 'sinatra'
 require 'mongoid'
 require_relative 'models/persona'
-require_relative 'models/comentario'
-require_relative 'models/pedido'
-require_relative 'models/producto'
 
 require_relative 'controllers/persona_controller'
 require_relative 'controllers/pedido_controller'
