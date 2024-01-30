@@ -1,8 +1,13 @@
-require 'sinatra'
+
 require 'sinatra/base'
+require 'json'
 require_relative '../models/persona'
 
 class PersonasController < Sinatra::Base
+
+  configure do
+    set :show_exceptions, false
+  end
 
   def self.index
     personas = Persona.all
@@ -22,15 +27,23 @@ class PersonasController < Sinatra::Base
 
   def self.create(request_body)
     nuevo_persona = JSON.parse(request_body, symbolize_names: true)
-    persona = Persona.create(nuevo_persona)
-    
-    if persona.valid?
-      201
-      persona.to_json
-    else
+    persona_encontrada = Persona.where(correo: nuevo_persona[:correo]).first
+
+    if persona_encontrada
       422
-      { mensaje: 'Error al crear la persona', errores: persona.errors.full_messages }.to_json
+      { mensaje: 'Error al crear la persona, Correo repetido', errores: 'Correo repetido' }.to_json
+    else
+      persona = Persona.create(nuevo_persona)
+      if persona.valid?
+        201
+        persona.to_json
+      else
+        422
+        { mensaje: 'Error al crear la persona', errores: persona.errors.full_messages }.to_json
+      end
     end
+
+    
   end
 
   def self.update(id, request_body)

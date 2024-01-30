@@ -7,6 +7,7 @@ class Persona
   field :telefono, type: String
   field :es_cliente, type: Boolean
   field :es_proveedor, type: Boolean
+  field :password, type: String
 
 
   def as_json(options = {})

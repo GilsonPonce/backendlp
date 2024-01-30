@@ -1,12 +1,32 @@
 require 'sinatra'
 require 'mongoid'
+require 'json'
+require 'sinatra/cross_origin'
+
 require_relative 'models/persona'
 require_relative 'controllers/persona_controller'
 
 Mongoid.load!('mongoid.yml', :development)
 
+configure do
+  enable :cross_origin
+end
+
 before do
+    puts "ANTES DE RUTA"
     content_type 'application/json'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
+end
+
+options '*' do
+  response.headers['Allow'] = 'GET, POST, PUT, DELETE, OPTIONS'
+  response.headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type, Accept, X-User-Email, X-Auth-Token'
+  response.headers['Access-Control-Allow-Origin'] = '*'
+  response.headers['Access-Control-Allow-Credentials'] = 'true'
+  200
 end
 
 get '/' do
