@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/base'
+require 'rack'
 require_relative '../models/producto'
 
 class ProductosController < Sinatra::Base
@@ -21,28 +22,27 @@ class ProductosController < Sinatra::Base
   end
 
   def self.create(request_body,params)
-    nuevo_producto = JSON.parse(request_body, symbolize_names: true)
-    
+    nuevo_producto = {}
     if params[:imagen]
-    # Directorio donde se guardarán las imágenes (ajústalo según tus necesidades)
-    upload_directory = File.join(settings.public_folder, 'uploads')
+      upload_directory = 'uploads'
+      FileUtils.mkdir_p(upload_directory) unless File.exist?(upload_directory)
+      image_name = SecureRandom.hex(10) + File.extname(params[:imagen][:filename])
+      image_path = File.join(upload_directory, image_name)
+      File.open(image_path, 'wb') { |f| f.write(params[:imagen][:tempfile].read) }
+      nuevo_producto[:imagen_path] = "/#{image_name}"
+    end
+    nuevo_producto[:nombre] = params[:nombre]
+    nuevo_producto[:modelo] = params[:modelo]
+    nuevo_producto[:marca] = params[:marca]
+    nuevo_producto[:valor] = params[:valor]
+    nuevo_producto[:descuento] = params[:descuento]
+    nuevo_producto[:pais] = params[:pais]
+    nuevo_producto[:descripcion] = params[:descripcion]
+    nuevo_producto[:proveedor] = params[:proveedor]
+    nuevo_producto[:cantidad] = params[:cantidad]
 
-    # Asegúrate de que el directorio exista
-    FileUtils.mkdir_p(upload_directory) unless File.exist?(upload_directory)
-
-    # Genera un nombre único para la imagen
-    image_name = SecureRandom.hex(10) + File.extname(params[:imagen][:filename])
-
-    # Guarda la imagen en el directorio de subidas
-    image_path = File.join(upload_directory, image_name)
-    File.open(image_path, 'wb') { |f| f.write(params[:imagen][:tempfile].read) }
-
-    # Asocia la ruta de la imagen con el producto
-    request_body[:imagen_path] = "/uploads/#{image_name}"
-  end
-    
     producto = Producto.create(nuevo_producto)
-    
+
     if producto.valid?
       201
       producto.to_json
@@ -52,12 +52,37 @@ class ProductosController < Sinatra::Base
     end
   end
 
-  def self.update(id, request_body)
+  def self.update(id, params)
     producto = Producto.find(id)
 
     if producto
-      datos_actualizados = JSON.parse(request_body, symbolize_names: true)
-      producto.update(datos_actualizados)
+      nuevo_producto = {}
+      if params[:imagen]
+        begin
+          File.delete(producto[:image_path])
+          puts "Archivo eliminado correctamente."
+        rescue Errno::ENOENT
+          puts "El archivo no existe."
+        rescue => e
+          puts "Error al intentar eliminar el archivo: #{e.message}"
+        end
+        upload_directory = 'uploads'
+        FileUtils.mkdir_p(upload_directory) unless File.exist?(upload_directory)
+        image_name = SecureRandom.hex(10) + File.extname(params[:imagen][:filename])
+        image_path = File.join(upload_directory, image_name)
+        File.open(image_path, 'wb') { |f| f.write(params[:imagen][:tempfile].read) }
+        nuevo_producto[:imagen_path] = "/#{image_name}"
+      end
+      nuevo_producto[:nombre] = params[:nombre]
+      nuevo_producto[:modelo] = params[:modelo]
+      nuevo_producto[:marca] = params[:marca]
+      nuevo_producto[:valor] = params[:valor]
+      nuevo_producto[:descuento] = params[:descuento]
+      nuevo_producto[:pais] = params[:pais]
+      nuevo_producto[:descripcion] = params[:descripcion]
+      nuevo_producto[:proveedor] = params[:proveedor]
+      nuevo_producto[:cantidad] = params[:cantidad]
+      producto.update(nuevo_producto)
       
       if producto.valid?
         producto.to_json

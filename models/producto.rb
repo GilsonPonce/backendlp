@@ -11,7 +11,7 @@ class Producto
   field :nombre, type: String
   field :descripcion, type: String
   field :cantidad, type: Integer
-  field :proveedor, type: Persona
+  field :proveedor, type: String
   field :imagen_path, type: String
 
   #marca, modelo, valor, descuento, pais, cantidad, proveedor

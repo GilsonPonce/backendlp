@@ -19,7 +19,6 @@ configure do
 end
 
 before do
-    puts "ANTES DE RUTA"
     content_type 'application/json'
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
     response.headers['Access-Control-Allow-Origin'] = '*'
@@ -36,7 +35,7 @@ options '*' do
 end
 
 get '/' do
-    'Hello world!'
+  erb :index
 end
 
 # Ruta para obtener todos los personas
@@ -44,9 +43,17 @@ get '/personas' do
   PersonasController.index
 end
 
+get '/producto' do
+  ProductosController.index
+end
+
 # Ruta para obtener un persona por ID
 get '/personas/:id' do
   PersonasController.show(params[:id])
+end
+
+get '/producto/:id' do
+  ProductosController.show(params[:id])
 end
 
 # Ruta para crear un nuevo persona
@@ -54,9 +61,17 @@ post '/personas' do
   PersonasController.create(request.body.read)
 end
 
+post '/producto' do
+  ProductosController.create(request.body.read,params)
+end
+
 # Ruta para actualizar un persona por ID
 put '/personas/:id' do
   PersonasController.update(params[:id], request.body.read)
+end
+
+put '/producto/:id' do
+  ProductosController.update(params[:id],params)
 end
 
 # Ruta para eliminar un persona por ID
@@ -64,7 +79,9 @@ delete '/personas/:id' do
   PersonasController.destroy(params[:id])
 end
 
-
+delete '/producto/:id' do
+  ProductosController.destroy(params[:id])
+end
 
 
 
