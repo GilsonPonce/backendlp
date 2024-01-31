@@ -12,6 +12,8 @@ require_relative 'controllers/comentario_controller'
 
 Mongoid.load!('mongoid.yml', :development)
 
+set :public_folder, File.dirname(__FILE__) + '/uploads'
+
 configure do
   enable :cross_origin
 end

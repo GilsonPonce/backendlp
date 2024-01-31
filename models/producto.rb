@@ -8,8 +8,11 @@ class Producto
   field :valor, type: Float
   field :descuento, type: Float
   field :pais, type: String
+  field :nombre, type: String
+  field :descripcion, type: String
   field :cantidad, type: Integer
   field :proveedor, type: Persona
+  field :imagen_path, type: String
 
   #marca, modelo, valor, descuento, pais, cantidad, proveedor
 
