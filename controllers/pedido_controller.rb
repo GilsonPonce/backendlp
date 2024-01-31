@@ -5,35 +5,61 @@ require_relative '../models/persona'
 
 class PedidosController < Sinatra::Base
 
+  
+  configure do
+    set :show_exceptions, false
+  end
+
 
   def self.index
     pedidos = Pedido.all
     pedidos.to_json
   end
 
-  def self.por_persona(persona_id)
-    persona = Persona.find(persona_id)
+  #def self.por_persona(persona_id)
+   # persona = Persona.find(persona_id)
     
-    if persona
-      pedidos = Pedido.where(persona: persona)
-      pedidos.to_json
+    #if persona
+     # pedidos = Pedido.where(persona: persona)
+      #pedidos.to_json
+    #else
+     # 404
+      #{ mensaje: 'Persona no encontrado' }.to_json
+    #end
+  #end
+
+  def self.show(id)
+    pedidos = Pedido.find(id)
+    
+    if pedido
+      pedido.to_json
     else
       404
-      { mensaje: 'Persona no encontrado' }.to_json
+      { mensaje: 'Pedido no encontrado' }.to_json
     end
   end
 
   def self.create(request_body)
     nuevo_pedido = JSON.parse(request_body, symbolize_names: true)
-    pedido = Pedido.create(nuevo_pedido)
+    pedido_encontrado= Pedido.where(correo: nuevo_pedido[:correo]).first
+   
     
-    if pedido.valid?
-      201
-      pedido.to_json
-    else
+    
+    if pedido_encontrado
       422
-      { mensaje: 'Error al crear el pedido', errores: pedido.errors.full_messages }.to_json
+      { mensaje: 'Error al crear el pedido, Pedido repetido', errores: 'Pedido repetido' }.to_json
+    else
+      pedido = Pedido.create(nuevo_pedido)
+      if pedido.valid?
+        201
+        pedido.to_json
+      else
+        422
+        { mensaje: 'Error al crear el pedido', errores: pedido.errors.full_messages }.to_json
+      end
     end
+
+    
   end
 
   def self.update(id, request_body)
